@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestión Médica</title>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+    <header class="header">
+        <h1>Centro Médico</h1>
+        <nav class="navegacion">
+            <button id="btn-registrar" class="nav-btn active">Registrar Paciente</button>
+            <button id="btn-buscar" class="nav-btn">Buscar Paciente</button>
+            <button id="btn-agendar" class="nav-btn">Agendar Cita</button>
+            <button id="btn-citas" class="nav-btn">Citas Guardadas</button> </nav>
+    </header>
+
+    <main class="container">
+        <section id="seccion-registrar" class="seccion activa">
+            <form id="form-registrar" class="formulario">
+                <h2>Añadir Nuevo Paciente</h2>
+                <div class="campo">
+                    <label for="nombre">Nombre:</label>
+                    <input type="text" id="nombre" required>
+                </div>
+                <div class="campo">
+                    <label for="apellido">Apellido:</label>
+                    <input type="text" id="apellido" required>
+                </div>
+                <div class="campo">
+                    <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
+                    <input type="date" id="fecha_nacimiento" required>
+                </div>
+                <div class="campo">
+                    <label for="telefono">Teléfono:</label>
+                    <input type="tel" id="telefono">
+                </div>
+                <button type="submit" class="boton">Guardar Paciente</button>
+            </form>
+        </section>
+
+        <section id="seccion-buscar" class="seccion">
+             <h2>Buscar Pacientes Registrados</h2>
+             <form id="form-buscar" class="formulario-busqueda">
+                 <input type="text" id="input-busqueda" placeholder="Buscar por nombre o apellido...">
+                 <button type="submit" class="boton">Buscar</button>
+             </form>
+             <div id="resultados-busqueda" class="resultados-container"></div>
+        </section>
+
+        <section id="seccion-agendar" class="seccion">
+             <form id="form-agendar" class="formulario">
+                <h2>Agendar Nueva Cita</h2>
+                <div class="campo">
+                    <label for="select-paciente">Paciente:</label>
+                    <select id="select-paciente" required>
+                        <option value="">-- Seleccione un paciente --</option>
+                    </select>
+                </div>
+                <div class="campo">
+                    <label for="select-medico">Médico:</label>
+                    <select id="select-medico" required>
+                        <option value="">-- Seleccione un médico --</option>
+                    </select>
+                </div>
+                <div class="campo">
+                    <label for="fecha-cita">Fecha y Hora de la Cita:</label>
+                    <input type="datetime-local" id="fecha-cita" required>
+                </div>
+                <div class="campo">
+                    <label for="motivo-cita">Motivo de la Consulta:</label>
+                    <textarea id="motivo-cita" rows="3"></textarea>
+                </div>
+                <button type="submit" class="boton">Guardar Cita</button>
+            </form>
+        </section>
+
+        <section id="seccion-citas" class="seccion">
+            <h2>Todas las Citas Programadas</h2>
+            <table class="tabla-citas">
+                <thead>
+                    <tr>
+                        <th>Fecha y Hora</th>
+                        <th>Paciente</th>
+                        <th>Médico</th>
+                        <th>Motivo</th>
+                    </tr>
+                </thead>
+                <tbody id="cuerpo-tabla-citas">
+                    </tbody>
+            </table>
+        </section>
+    </main>
+
+    <script src="app.js" defer></script>
+</body>
+</html>

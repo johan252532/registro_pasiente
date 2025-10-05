@@ -1,0 +1,159 @@
+:root {
+    --color-primario: #007bff;
+    --color-primario-hover: #0056b3;
+    --color-fondo: #f4f7f6;
+    --color-blanco: #ffffff;
+    --color-texto: #333;
+    --sombra-caja: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: var(--color-fondo);
+    color: var(--color-texto);
+    margin: 0;
+}
+
+.header {
+    background-color: var(--color-primario);
+    color: var(--color-blanco);
+    padding: 20px;
+    text-align: center;
+    box-shadow: var(--sombra-caja);
+}
+
+.navegacion {
+    margin-top: 15px;
+}
+
+.nav-btn {
+    background-color: transparent;
+    border: 2px solid var(--color-blanco);
+    color: var(--color-blanco);
+    padding: 10px 20px;
+    margin: 0 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.nav-btn:hover, .nav-btn.active {
+    background-color: var(--color-blanco);
+    color: var(--color-primario);
+}
+
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+.seccion {
+    display: none; 
+    background-color: var(--color-blanco);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: var(--sombra-caja);
+}
+
+.seccion.activa {
+    display: block;
+}
+
+.formulario, .formulario-busqueda {
+    margin-bottom: 20px;
+}
+
+.campo {
+    margin-bottom: 15px;
+}
+
+.campo label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.campo input, .campo select, .campo textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.boton {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--color-primario);
+    color: var(--color-blanco);
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.boton:hover {
+    background-color: var(--color-primario-hover);
+}
+
+.formulario-busqueda {
+    display: flex;
+    gap: 10px;
+}
+
+.resultados-container {
+    margin-top: 30px;
+}
+
+.paciente-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.paciente-card h3 {
+    margin-top: 0;
+    color: var(--color-primario);
+}
+
+.citas-lista {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.citas-lista li {
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    border-left: 4px solid var(--color-primario);
+}
+
+.tabla-citas {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.tabla-citas th, .tabla-citas td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+
+.tabla-citas th {
+    background-color: var(--color-primario);
+    color: var(--color-blanco);
+}
+
+.tabla-citas tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.tabla-citas tr:hover {
+    background-color: #ddd;
+}
