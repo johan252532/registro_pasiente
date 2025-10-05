@@ -157,3 +157,22 @@ body {
 .tabla-citas tr:hover {
     background-color: #ddd;
 }
+
+
+
+/* ... (resto del CSS sin cambios) ... */
+
+/* Estilos para las etiquetas de estado de las citas */
+.estado {
+    padding: 5px 10px;
+    border-radius: 15px;
+    color: white;
+    font-size: 0.9em;
+    font-weight: bold;
+    text-align: center;
+}
+
+.estado.programada { background-color: #007bff; }
+.estado.confirmada { background-color: #28a745; }
+.estado.cancelada { background-color: #dc3545; }
+.estado.completada { background-color: #6c757d; }

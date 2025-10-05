@@ -1,3 +1,5 @@
+// Contenido completo del server.js actualizado
+
 const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
@@ -8,30 +10,28 @@ const port = 3000;
 app.use(cors());
 app.use(express.json());
 
-// --- CAMBIO IMPORTANTE: USAMOS UN POOL DE CONEXIONES ---
-// Un Pool es más robusto y eficiente que una conexión única.
 const db = mysql.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASS,
     port: process.env.DB_PORT,
-    database: process.env.DB_NAME,
-    //... el resto de la configuración
-}).promise(); // Añadimos .promise() para poder usar async/await
+    database: process.env.DB_NAME || 'registro_pasientes', // Añadimos un fallback
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
+}).promise();
 
-// Verificamos que el pool puede conectar
 db.getConnection()
     .then(connection => {
         console.log('✅ ¡Pool de conexiones a la DB conectado con éxito!');
-        connection.release(); // Liberamos la conexión de prueba
+        connection.release();
     })
     .catch(err => {
         console.error('🔴 Error al conectar el pool a la base de datos:', err);
     });
 
-// --- RUTAS DE LA API (Ahora usan 'db' en lugar de 'dbConnection') ---
+// --- RUTAS DE LA API ---
 
-// RUTA PARA OBTENER TODOS LOS PACIENTES
 app.get('/api/pacientes', async (req, res) => {
     try {
         const [results] = await db.query('SELECT * FROM Paciente ORDER BY Apellido, Nombre;');
@@ -41,7 +41,6 @@ app.get('/api/pacientes', async (req, res) => {
     }
 });
 
-// RUTA PARA REGISTRAR UN NUEVO PACIENTE
 app.post('/api/pacientes', async (req, res) => {
     try {
         const { nombre, apellido, fecha_nacimiento, telefono } = req.body;
@@ -49,12 +48,11 @@ app.post('/api/pacientes', async (req, res) => {
         const [results] = await db.query(query, [nombre, apellido, fecha_nacimiento, telefono]);
         res.status(201).json({ message: 'Paciente registrado con éxito.', insertId: results.insertId });
     } catch (error) {
-        console.error('Error al registrar paciente:', error); // Logueamos el error
+        console.error('Error al registrar paciente:', error);
         res.status(500).json({ error: 'Error al registrar el paciente.' });
     }
 });
 
-// RUTA PARA OBTENER TODOS LOS MÉDICOS
 app.get('/api/medicos', async (req, res) => {
     try {
         const query = `
@@ -70,7 +68,6 @@ app.get('/api/medicos', async (req, res) => {
     }
 });
 
-// RUTA PARA AGENDAR UNA CITA
 app.post('/api/citas', async (req, res) => {
     try {
         const { id_paciente, id_medico, fecha_hora, motivo } = req.body;
@@ -82,14 +79,14 @@ app.post('/api/citas', async (req, res) => {
     }
 });
 
-// RUTA PARA BUSCAR PACIENTES Y SUS CITAS
+// --- RUTA ACTUALIZADA: BUSCAR PACIENTES Y SUS CITAS (INCLUYE ESTADO) ---
 app.get('/api/pacientes/buscar', async (req, res) => {
     try {
         const terminoBusqueda = req.query.q;
         const query = `
             SELECT 
                 p.ID_Paciente, p.Nombre, p.Apellido, p.Fecha_Nacimiento, p.Telefono,
-                c.ID_Cita, c.Fecha_Hora, c.Motivo_Consulta,
+                c.ID_Cita, c.Fecha_Hora, c.Motivo_Consulta, c.Estado, -- <<-- CAMBIO AQUÍ
                 m.Nombre as MedicoNombre, m.Apellido as MedicoApellido
             FROM Paciente p
             LEFT JOIN Cita c ON p.ID_Paciente = c.ID_Paciente
@@ -116,25 +113,24 @@ app.get('/api/pacientes/buscar', async (req, res) => {
                     ID_Cita: row.ID_Cita,
                     Fecha_Hora: row.Fecha_Hora,
                     Motivo_Consulta: row.Motivo_Consulta,
+                    Estado: row.Estado, // <<-- CAMBIO AQUÍ
                     MedicoNombre: row.MedicoNombre,
                     MedicoApellido: row.MedicoApellido
                 });
             }
         });
-
         res.json(Object.values(pacientes));
-
     } catch (error) {
         res.status(500).json({ error: 'Error durante la búsqueda.' });
     }
 });
 
-// --- NUEVA RUTA: OBTENER TODAS LAS CITAS GUARDADAS ---
+// --- RUTA ACTUALIZADA: OBTENER TODAS LAS CITAS GUARDADAS (INCLUYE ESTADO) ---
 app.get('/api/citas', async (req, res) => {
     try {
         const query = `
             SELECT 
-                c.Fecha_Hora, c.Motivo_Consulta,
+                c.Fecha_Hora, c.Motivo_Consulta, c.Estado, -- <<-- CAMBIO AQUÍ
                 p.Nombre AS PacienteNombre, p.Apellido AS PacienteApellido,
                 m.Nombre AS MedicoNombre, m.Apellido AS MedicoApellido
             FROM Cita c
@@ -151,7 +147,6 @@ app.get('/api/citas', async (req, res) => {
 });
 
 
-// INICIAR EL SERVIDOR
 app.listen(port, () => {
     console.log(`🚀 Servidor escuchando en http://localhost:${port}`);
 });
