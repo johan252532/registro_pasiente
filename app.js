@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const API_BASE_URL = 'http://localhost:3000/api';
+    const API_BASE_URL = 'https://registro-pasiente.onrender.com/api';
 
     const botonesNav = document.querySelectorAll('.nav-btn');
     const secciones = document.querySelectorAll('.seccion');
